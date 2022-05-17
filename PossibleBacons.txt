@@ -1,0 +1,30 @@
+Possible Bacons (First/Last 5)
+
+Your program should help you find other possible Bacons, according to two different criteria:
+- Degree (number of costars). This is the same as in the short assignment.
+
+BEST - These actors have a high number of edges leading in to them.
+Robert De Niro
+Gene Hackman
+Michael Caine
+Sean Connery
+Harvey Keitel
+
+WORST - These actors have a low number of edges leading in to them.
+Patrick Achdjian
+Polli Magaro
+Gigi Leung
+Michel Simon
+Joshua Suherman
+
+- Average separation (path length) when serving as center of the universe. This simply requires looping over all the
+actors one by one. Consider each one as the center of the universe, find the average path length using the method above,
+and store it away for sorting. So just a few lines of code. It could take some time, but under a minute on my machine
+with the sample solution. Since not all actors are in the Bacon universe (have a path to him), you can limit the
+result to those that are.
+
+BEST - These actors have a low average separation.
+[Gene Hackman, Robert De Niro, Robert Duvall, Sean Connery, Michael Caine]
+
+WORST - These actors have a high average separation.
+[Nita Naldi, John Longden, Charles Paton, John F. Hamilton, Sara Allgood]

@@ -19,193 +19,166 @@ import java.util.*;
 
 public class GraphLibrary
 {
+    /**
+     * BFS
+     * Using BFS to find the shortest path tree for a current center of the universe. Returns the path tree as a graph.
+     *
+     * @param g The graph to perform the BFS algorithm on.
+     * @param source The source node for the BFS algorithm.
+     */
     public static <V, E> Graph<V, E> bfs(Graph<V, E> g, V source)
     {
+        // Creating a new AdjacencyMapGraph, and inserting the source node.
         Graph<V, E> bfsGraph = new AdjacencyMapGraph<V, E>();
         bfsGraph.insertVertex(source);
 
+        // Creating a new HashSet for the visited nodes.
         Set<V> visited = new HashSet<V>();
+
+        // Creating a new LinkedList for the queue.
         Queue<V> queue = new LinkedList<V>();
 
-        queue.add(source);
+        // Adding the source node to the Set and Queue.
         visited.add(source);
+        queue.add(source);
 
+        // While the queue is not still empty...
         while (!queue.isEmpty())
         {
+            // Remove an element from the queue.
             V u = queue.remove();
 
+            // Cycling through the outNeighbors of the removed element.
             for (V v: g.outNeighbors(u))
             {
+                // Checking to make sure that the visited set does not contain the neighbor.
                 if (!visited.contains(v))
                 {
+                    // Adding the element v to the queue and to visited.
                     queue.add(v);
                     visited.add(v);
+
+                    // Inserting a new vertex in the graph, and inserting a directed edge with the appropriate label.
                     bfsGraph.insertVertex(v);
                     bfsGraph.insertDirected(v, u, g.getLabel(u, v));
                 }
             }
         }
 
+        // Returning the graph.
         return bfsGraph;
     }
 
+    /**
+     * Get Path
+     * Given a shortest path tree and a vertex, we construct a path from the vertex back to the center of the universe.
+     *
+     * @param tree The path tree to construct the path from.
+     * @param v The vertex from which to construct a path.
+     */
     public static <V, E> List<V> getPath(Graph<V, E> tree, V v)
     {
+        // Creating a new ArrayList to hold the path.
         ArrayList<V> path = new ArrayList<V>();
+
+        // Adding the current vertex to the ArrayList.
         V currentVertex = v;
         path.add(currentVertex);
 
+        // While the outDegree of the current vertex is greater than zero...
         while (tree.outDegree(currentVertex) > 0)
         {
+            // Go through the outNeighbors of the current vertex...
             for (V u: tree.outNeighbors(currentVertex))
             {
+                // Add it to the path and reset the current vertex.
                 path.add(u);
                 currentVertex = u;
             }
         }
 
+        // Return the path, given as an ArrayList.
         return path;
     }
 
-
+    /**
+     * Missing Vertices
+     * Given a graph and a subgraph (here the shortest path tree), determine which vertices are in the graph but not
+     * the subgraph (here, not reached by BFS).
+     *
+     * @param graph The main graph, which has all the vertices.
+     * @param subgraph The subgraph, which has only some vertices (presumably).
+     */
     public static <V, E> Set<V> missingVertices(Graph<V, E> graph, Graph<V, E> subgraph)
     {
+        // Creating a new HashSet to hold the Set of missing vertices.
         Set<V> missingVertices = new HashSet<V>();
 
+        // For each vertex in the vertices of the main graph...
         for (V vertex: graph.vertices())
         {
+            // If the subgraph does not contain the vertex...
             if (!subgraph.hasVertex(vertex))
             {
+                // Add the vertex to the set of missing vertices.
                 missingVertices.add(vertex);
             }
         }
 
+        // Return the set of missing vertices.
         return missingVertices;
     }
 
     /**
-     * Find the average distance-from-root in a shortest path tree.
-     * Note: do this without enumerating all the paths! Hint: think tree recursion...
+     * Average Separation
+     * Finding the average distance-from-root in a shortest path tree. We do this without enumerating all the paths.
+     *
+     * @param tree The shortest path tree from which to calculate the distance.
+     * @param root The root to use when finding the average separation.
      */
     public static <V, E> double averageSeparation(Graph<V,E> tree, V root)
     {
+        // Creating an ArrayList to ensure that the value is not reset when going through the tree via the helper function.
         ArrayList<Integer> totalSumOfPaths = new ArrayList<>();
+
+        // Only the first value of the ArrayList is updated.
         totalSumOfPaths.add(0);
 
+        // Using the helper function to update the ArrayList.
         summation(tree, root, 0, totalSumOfPaths);
 
+        // Returning the average distance-from-root by dividing the sum by the number of (other) vertices.
         return ((double) totalSumOfPaths.get(0)) / (tree.numVertices() - 1);
     }
 
-    public static <V, E> ArrayList<Integer> summation(Graph<V, E> tree, V vertex, int pathDistance, ArrayList<Integer> totalSumOfPaths)
+    /**
+     * Summation
+     * Helper function for the averageSeparation() method.
+     *
+     * @param tree The shortest path tree from which to calculate the distance.
+     * @param vertex The vertex we calculate the distance for.
+     * @param pathDistance The path distance, which increases by one as we move away from the root.
+     * @param totalSumOfPaths The ArrayList which holds the total sum of all the paths.
+     */
+    public static <V, E> void summation(Graph<V, E> tree, V vertex, int pathDistance, ArrayList<Integer> totalSumOfPaths)
     {
-        // System.out.println("Vertex " + vertex);
-        // System.out.println("In Degree " + tree.inDegree(vertex));
-        // System.out.println("Path Distance " + pathDistance);
-        // System.out.println("Total Sum " + totalSumOfPaths);
-        // System.out.println();
-
+        // Checking to make sure the inDegree of a given vertex is non-zero.
         if (tree.inDegree(vertex) > 0)
         {
+            // For each element in the inNeighbors, according to the vertex.
             for (V v: tree.inNeighbors(vertex))
             {
+                // Set the total sum of the paths equal to the appropriate value, based on the path distance.
                 totalSumOfPaths.set(0, totalSumOfPaths.get(0) + pathDistance + 1);
+
+                // Recursively call the helper function for the averageSeparation() method.
                 summation(tree, v, pathDistance + 1, totalSumOfPaths);
             }
         }
-
-        return totalSumOfPaths;
     }
 
     /**
-     * Takes a random walk from a vertex, up to a given number of steps.
-     * So a 0-step path only includes start, while a 1-step path includes start and one of its out-neighbors,
-     * and a 2-step path includes start, an out-neighbor, and one of the out-neighbor's out-neighbors.
-     *
-     * Stops earlier if no step can be taken (i.e., reach a vertex with no out-edge).
-     *
-     * @param g Graph to walk on.
-     * @param start Initial Vertex (Assumed to be in graph.)
-     * @param steps Max number of steps.
-     * @return A list of vertices starting with start, each with an edge to the sequentially next in the list;
-     * null if start isn't in graph
-     */
-    public static <V, E> List<V> randomWalk(Graph<V, E> g, V start, int steps)
-    {
-        // Boolean value to check to see if start is in the graph.
-        boolean graphHasStart = false;
-
-        // Cycle through the vertices in the Graph and add them to the ArrayList.
-        for (V vertex: g.vertices())
-        {
-            // If there is a vertex equal to start, we set the boolean value equal to true.
-            if (vertex.equals(start))
-            {
-                graphHasStart = true;
-                break;
-            }
-        }
-
-        // If start is not in the graph, we simply return null.
-        if (!graphHasStart)
-        {
-            return null;
-        }
-
-        // Otherwise... we create a new ArrayList to hold the path of the random walk.
-        List<V> pathList = new ArrayList<V>();
-
-        // Adding the start node to the ArrayList.
-        pathList.add(start);
-
-        // Cycling through the number of steps specified.
-        for (int i = 0; i < steps; i += 1)
-        {
-            /* If the node does not have any out-neighbors, we return the ArrayList.
-            The 'start' node is updated for each iteration of the for loop.
-             */
-            if (g.outDegree(start) == 0)
-            {
-                return pathList;
-            }
-
-            // Otherwise...
-            else
-            {
-                // We create a maxValue which we use later for choosing a random variable out of the Iterator.
-                double maxValue = -1;
-
-                // Setting the nextChoice (temporary variable) to the start node.
-                V nextChoice = start;
-
-                // Iterating through the outNeighbors of the start node.
-                for (V vertex: g.outNeighbors(start))
-                {
-                    // Creating a new random variable that is used to choose a random outNeighbor.
-                    double randomValue = Math.random();
-
-                    // If the random variable is greater than the maxValue...
-                    if (randomValue >= maxValue)
-                    {
-                        // We maxValue to the randomValue, and choose the vertex we are at as the nextChoice.
-                        maxValue = randomValue;
-                        nextChoice = vertex;
-                    }
-                }
-
-                // Adding the nextChoice vertex to the pathList.
-                pathList.add(nextChoice);
-
-                // Setting the start node to the nextChoice so that we can consider its neighbors.
-                start = nextChoice;
-            }
-        }
-
-        // Returning the ArrayList.
-        return pathList;
-    }
-
-    /**
+     * Vertices By In Degree
      * Orders vertices in decreasing order by their in-degree.
      *
      * @param g Graph
@@ -229,6 +202,11 @@ public class GraphLibrary
         return verticesByDegree;
     }
 
+    /**
+     * Testing Method
+     * For comments, please see the Kevin Bacon Game code, specifically the initializeMainGraph() method, which uses the
+     * same structure as this testing code.
+     */
     public static void main(String[] args) throws IOException
     {
         Map<Integer, String> actorMap = new HashMap<>();
@@ -279,9 +257,9 @@ public class GraphLibrary
 
         connections.close();
 
-        System.out.println(actorMap);
-        System.out.println(movieMap);
-        System.out.println(connectionsMap);
+        System.out.println("Actor Map: " + actorMap);
+        System.out.println("Movie Map: " + movieMap);
+        System.out.println("Connections Map: " + connectionsMap);
 
         AdjacencyMapGraph<String, Set<String>> erdosGraph = new AdjacencyMapGraph<String, Set<String>>();
 
@@ -318,16 +296,19 @@ public class GraphLibrary
             }
         }
 
+        /* To test the functions, rather than hard-coding the addition of vertices and edges, as asked, we used the
+        algorithm we implemented in initializeMainGraph() for the Kevin Bacon Game.
+         */
         System.out.println();
-        System.out.println(erdosGraph);
+        System.out.println("Erdos Graph: " + erdosGraph);
 
         System.out.println();
-        System.out.println(bfs(erdosGraph, "Kevin Bacon"));
+        System.out.println("BFS Graph: " + bfs(erdosGraph, "Kevin Bacon"));
         System.out.println();
-        System.out.println(getPath(bfs(erdosGraph, "Kevin Bacon"), "Charlie"));
+        System.out.println("Path (Charlie To Kevin): " + getPath(bfs(erdosGraph, "Kevin Bacon"), "Charlie"));
         System.out.println();
-        System.out.println(missingVertices(erdosGraph, bfs(erdosGraph, "Kevin Bacon")));
+        System.out.println("Missing Vertices: " + missingVertices(erdosGraph, bfs(erdosGraph, "Kevin Bacon")));
         System.out.println();
-        System.out.println(averageSeparation(bfs(erdosGraph, "Kevin Bacon"), "Kevin Bacon"));
+        System.out.println("Average Separation: " + averageSeparation(bfs(erdosGraph, "Kevin Bacon"), "Kevin Bacon"));
     }
 }

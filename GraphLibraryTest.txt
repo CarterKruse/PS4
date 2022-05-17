@@ -1,0 +1,15 @@
+Actor Map: {400=Dartmouth (Earl thereof), 1=Kevin Bacon, 100=Alice, 500=Nobody, 200=Bob, 600=Nobody's Friend, 300=Charlie}
+Movie Map: {50=E movie, 20=B movie, 40=D movie, 10=A movie, 60=F movie, 30=C movie}
+Connections Map: {50=[1, 100], 20=[300, 400], 40=[100, 300], 10=[1, 100, 200], 60=[500, 600], 30=[300, 200]}
+
+Erdos Graph: Vertices: [Bob, Alice, Nobody, Charlie, Nobody's Friend, Kevin Bacon, Dartmouth (Earl thereof)]
+Out Edges: {Bob={Alice=[A movie], Charlie=[C movie], Kevin Bacon=[A movie]}, Alice={Bob=[A movie], Charlie=[D movie], Kevin Bacon=[A movie, E movie]}, Nobody={Nobody's Friend=[F movie]}, Charlie={Bob=[C movie], Alice=[D movie], Dartmouth (Earl thereof)=[B movie]}, Nobody's Friend={Nobody=[F movie]}, Kevin Bacon={Bob=[A movie], Alice=[A movie, E movie]}, Dartmouth (Earl thereof)={Charlie=[B movie]}}
+
+BFS Graph: Vertices: [Bob, Alice, Charlie, Kevin Bacon, Dartmouth (Earl thereof)]
+Out Edges: {Bob={Kevin Bacon=[A movie]}, Alice={Kevin Bacon=[A movie, E movie]}, Charlie={Bob=[C movie]}, Kevin Bacon={}, Dartmouth (Earl thereof)={Charlie=[B movie]}}
+
+Path (Charlie To Kevin): [Charlie, Bob, Kevin Bacon]
+
+Missing Vertices: [Nobody, Nobody's Friend]
+
+Average Separation: 1.75
