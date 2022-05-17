@@ -1,0 +1,64 @@
+Commands:
+c <#>: list top (positive number) or bottom (negative) <#> centers of the universe, sorted by average separation
+d <low> <high>: list actors sorted by degree, with degree between low and high
+i: list actors with infinite separation from the current center
+p <name>: find path from <name> to current center of the universe
+s <low> <high>: list actors sorted by non-infinite separation from the current center, with separation between low and high
+u <name>: make <name> the center of the universe
+q: quit game
+
+Kevin Bacon is now the center of the acting universe, connected to 7493/9235 actors with average separation 3.2814626985186175
+
+Kevin Bacon game >
+p Diane Keaton
+Diane Keaton's number is 2
+Diane Keaton appeared in [Something's Gotta Give (2003)] with Jack Nicholson
+Jack Nicholson appeared in [Few Good Men, A (1992)] with Kevin Bacon
+
+Kevin Bacon game >
+p LeVar Burton
+LeVar Burton's number is 3
+LeVar Burton appeared in [Star Trek: Insurrection (1998), Star Trek: Nemesis (2002), Star Trek: First Contact (1996), Star Trek: Generations (1994)] with Patrick Stewart
+Patrick Stewart appeared in [Conspiracy Theory (1997)] with Julia Roberts
+Julia Roberts appeared in [Flatliners (1990)] with Kevin Bacon
+
+Kevin Bacon game >
+p Buster Keaton
+Buster Keaton's number is 5
+Buster Keaton appeared in [Limelight (1952)] with Claire Bloom
+Claire Bloom appeared in [Crimes and Misdemeanors (1989)] with Martin Landau
+Martin Landau appeared in [Tucker: The Man and His Dream (1988)] with Joan Allen
+Joan Allen appeared in [Searching for Bobby Fischer (1993)] with Joe Mantegna
+Joe Mantegna appeared in [Queens Logic (1991)] with Kevin Bacon
+
+Kevin Bacon game >
+u John Longden
+John Longden is now the center of the acting universe, connected to 7493/9235 actors with average separation 8.676764980648606
+
+John Longden game >
+p Kevin Bacon
+Kevin Bacon's number is 8
+Kevin Bacon appeared in [She's Having a Baby (1988)] with Elizabeth McGovern
+Elizabeth McGovern appeared in [Wings of Courage (1995)] with Val Kilmer
+Val Kilmer appeared in [Top Secret! (1984)] with Peter Cushing
+Peter Cushing appeared in [Tales from the Crypt (1972)] with Richard Greene
+Richard Greene appeared in [Little Princess, The (1939)] with Ian Hunter
+Ian Hunter appeared in [Ring, The (1927)] with Carl Brisson
+Carl Brisson appeared in [Manxman, The (1929)] with Anny Ondra
+Anny Ondra appeared in [Blackmail (1929)] with John Longden
+
+John Longden game >
+p Buster Keaton
+Buster Keaton's number is 9
+Buster Keaton appeared in [Limelight (1952)] with Nigel Bruce
+Nigel Bruce appeared in [Suspicion (1941)] with Cary Grant
+Cary Grant appeared in [Affair to Remember, An (1957)] with Deborah Kerr
+Deborah Kerr appeared in [End of the Affair, The (1955)] with Peter Cushing
+Peter Cushing appeared in [Tales from the Crypt (1972)] with Richard Greene
+Richard Greene appeared in [Little Princess, The (1939)] with Ian Hunter
+Ian Hunter appeared in [Ring, The (1927)] with Carl Brisson
+Carl Brisson appeared in [Manxman, The (1929)] with Anny Ondra
+Anny Ondra appeared in [Blackmail (1929)] with John Longden
+
+John Longden game >
+q
